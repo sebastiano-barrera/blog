@@ -1,7 +1,7 @@
 ---
 title: "A Modest Compiler for JavaScript"
 date: 2023-12-19T16:58:03+01:00
-draft: true
+draft: false
 toc: false
 images:
 tags:
@@ -21,9 +21,9 @@ This blog exists because this little side project has now accrued enough "histor
 <!--- Really keep this? Should it be shorter? -->
 
 <!-- TODO  make it clearer: it was and is for *fun* -->
-I started mcjs as my *second* attempt at writing a compiler. In 2021, after temporarily changing my living arrangement in response to the COVID situation in Italy, I started devoting a part of the proverbial "nights and weekends" to learning how compilers really work, a topic for which I had long felt a strong but unsatisfied curiosity and interest. It would also be way to practice my software development skills while the ["curfew"](https://it.wikipedia.org/wiki/Gestione_della_pandemia_di_COVID-19_in_Italia#Allentamento_delle_misure_di_contenimento_(26_aprile_-_5_agosto_2021)) (sorry, couldn't find a page in English) prevented us all from spending our nights in pubs as we would have otherwise.
+I started mcjs as my *second* attempt at writing a compiler. In 2021, after temporarily changing my living arrangement in response to the COVID situation in Italy, I started devoting a part of the proverbial "nights and weekends" to learning how compilers really work, a topic for which I had long felt a strong but unsatisfied curiosity and interest. It was also a way to practice my software development skills while the ["curfew"](https://it.wikipedia.org/wiki/Gestione_della_pandemia_di_COVID-19_in_Italia#Allentamento_delle_misure_di_contenimento_(26_aprile_-_5_agosto_2021)) (sorry, couldn't find a page in English) prevented us all from spending our nights in pubs as we would have otherwise.
 
-There is plenty of good reading material online, ranging from [academic papers](https://arxiv.org/abs/2011.05608) to [blog posts](https://sillycross.github.io/2022/11/22/2022-11-22/) to [tweets](https://twitter.com/DrawsMiguel/status/1727355995507376630). With this sort of DIY curriculum, I managed to cover a bunch of topics, including various intermediate representations (SSA, A-normal, CPS), basic optimizations such as constant folding and dead code elimination, register allocation.  
+There is plenty of good reading material online, ranging from [academic papers](https://arxiv.org/abs/2011.05608) to [blog posts](https://sillycross.github.io/2022/11/22/2022-11-22/) to [tweets](https://twitter.com/DrawsMiguel/status/1727355995507376630). With this sort of DIY curriculum, I managed to cover a bunch of topics, including various intermediate representations (SSA, A-normal, CPS), basic optimizations such as constant folding and dead code elimination, register allocation, and more.  
 
 This was all put into practice by working on *mclua*, a Modest Compiler for the Lua programming language.  The intention, if you can believe the naïvety of it, was to *purposely* go against the grain and write an Ahead-of-Time compiler instead of the classic interpreter, pretending that I didn't know any better (I do, I promise), and then try to learn as much as possible from this "artificially misguided" endeavor. To top it off, the compiler itself was also written in Lua.
 
@@ -46,18 +46,20 @@ Here is what I want mcjs to be and *not* to be:
 
 - *Performance*. It should be within 10x of interpreter-only V8/Node.js. In other words, *any* performance that is not obviously the result of a bug will be fine.
     - Still, the JIT should be measureably faster than the interpreter.
-    - I don't think that the interpreter will ever be as fast as LuaJIT's, which is hand-coded in Assembly with hand-picked registers by a master of the craft. I'm fine with a dumb interpreter written in plain portable Rust. I might refine the bytecode design and/or add an intermediate compilation tier based on "quick and dirty" [copy-and-patch](https://arxiv.org/abs/2011.13127) at some point.
+    - I don't think that the interpreter will ever be as fast as LuaJIT's, which is hand-coded in Assembly with hand-picked registers by a master of the craft. I'm fine with a dumb portable interpreter. I might refine the bytecode design and/or add an intermediate compilation tier based on "quick and dirty" [copy-and-patch](https://arxiv.org/abs/2011.13127) at some point.
 
 - *Learning*. This the real goal: knowing how the runtime interpreted sausage is made. Of particular interest to me are optimization techniques, JIT compilation techniques and efficient bytecode design. I'm going into this without a detailed understanding of what I'll need to study. I have a clear plan laid out in broad strokes in my head; I'll just see what's needed and study it when time comes.
 
-Another non-goal is creating a real open source project and community. Still, if you have any comment or critique, or want to discuss any of the topics presented here, I'd *love* to hear it!
+Finally, creating any sort of real open source project and community is out of scope. I wouldn't even know where to start, honestly. Still, if you have any comment or critique, or want to discuss any of the topics presented here, or want to fork the code for whatever reason, I'd *love* to hear about it!
 
 ### Did it  *have*  to be JavaScript?
 
 I didn't pick JavaScript after thinking very long and hard about it. It seemed cool, and that was it. But there were some things on my mind that tipped the scale:
 
-- There is a [world-economy-moving amount](https://www.npmjs.com/) of JavaScript code readily available. <!--- It's useful to have many "real" packages that are designed to run in a standalone process (in Node.js), accomplish some generic task, and are simple enough to test my compiler on without implementing too many "system" APIs. In my experience, most of the simple-enough open source Lua code you can find is made to extend a larger application and it relies on the the application's extension APIs to be run and tested. The prospect of one day running simple but "real" programs or libraries is good for motivation! -->
-- There are multiple production-quality parsers ready to use, multiple implementations you can compare yourself to (and they even write fantastic [blog](https://v8.dev/blog) [posts](https://webkit.org/blog/10308/speculation-in-javascriptcore/)), and a lot of high quality documentation.
+- There is a [world-economy-moving amount](https://www.npmjs.com/) of JavaScript code readily available.
+    - In particular, it's useful to have many "real" packages that are designed to run in a standalone process (in Node.js), accomplish some generic task, and are simple enough to test my compiler on without implementing too many "system" APIs. In contrast, most of the simple-enough open source Lua code I could get my hands on seems to have been made to extend a larger application and it relies on the the application's extension APIs to be run and tested.
+    - The prospect of one day running simple but "real" programs or libraries is good for motivation! 
+- There are multiple production-quality parsers ready to use, multiple implementations you can compare yours to (and they even write fantastic [blog](https://v8.dev/blog) [posts](https://webkit.org/blog/10308/speculation-in-javascriptcore/)), and a lot of high quality documentation.
 - I kinda like using it, especially with all the features from ES6 and later.
 - JavaScript has an official spec. I still think it's not as good as using an existing implementation as a test oracle, but I appreciate being able to look up a detail and read a clear, black-on-white definition of how things ought to work.
 
@@ -95,9 +97,9 @@ Some work is already done:
 
 * I started some work the JIT compiler, but I decided to "shelve" it in favor of going further with the interpreter first. This is because the JIT implementation and design is by its nature very tightly coupled with the interpreter's internals.  I realized that the interpreter is still too far from complete and susceptible to change in the near future, so I would risk reworking the JIT completely many times before having the whole VM work fine. So, it'll just wait.
 
-But many more are needed in order to reach the goal. The most important are:
+But much more are needed in order to reach the goal. I think the most important tasks are:
 
- + Complete the implementation of the basic parts of the language's semantics, at least the basic parts of the language.  Objects have to work *just* right. 
+ + Complete the implementation of the basic parts of the language's semantics, at least the basic parts of it.  Objects have to work *just* right. 
  + Garbage collector. Right now it just leaks everything!
  + Increase the coverage of the standard library.
  + Fix, fix, fix bugs
