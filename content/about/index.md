@@ -1,7 +1,7 @@
 ---
 title: "who the hell is this sebastiano guy anyway?"
 date: 2023-12-20T11:40:36+01:00
-draft: true
+draft: false
 ---
 
 I'm Sebastiano Barrera, ~~and that's why I drink~~. I'm a software engineer currently based in Turin, Italy 🇮🇹.
