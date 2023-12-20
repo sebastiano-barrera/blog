@@ -14,6 +14,8 @@ In the last year or so, I've been working on **mcjs**, a Modest Compiler for Jav
 
 This blog exists because this little side project has now accrued enough "history" that it seemed like a good idea to write down and collect some notes, if only for myself to remember why I made a certain choice or another. And if some reader somewhere finds it useful or interesting, then it'll be all the more worth it :)
 
+(Many thanks to [Vincenzo](https://twitter.com/cIynamen) for reviewing this post prior to publication.)
+
 ## Brief history of its predecessor: mclua
 
 (You can skip this one, no hard feelings.)
