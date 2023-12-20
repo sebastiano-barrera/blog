@@ -1,6 +1,6 @@
 baseURL = 'http://sebastiano-barrera.github.io/'
 languageCode = 'en-us'
-title = "bits & tricks"
+title = "sebastiano's notes"
 # theme = "hello-friend-ng"
 # theme = "hugo-texify3"
 theme = "archie"
@@ -9,5 +9,41 @@ theme = "archie"
 
 [params]
 mode = "auto"
+
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://twitter.com/seb_barrera"
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/sebastiano-barrera"
+
+[[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/sebastiano-barrera-2233b5217/"
+
+
+[[menu.main]]
+name = "about"
+url = "/about"
+weight = 1
+
+[[menu.main]]
+name = "all posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "tags"
+url = "/tags"
+weight = 3
+
+
+
+
+
 
 
