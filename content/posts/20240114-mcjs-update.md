@@ -1,0 +1,187 @@
+---
+title: "mcjs Progress Update: December, January 2024"
+date: 2024-01-14T18:52:01+01:00
+draft: true
+tags:
+ - mcjs
+---
+
+To both of my readers: I hope you had a great time during the holidays, and that you feel re-energized and ready to take on the world.
+
+I crossed the threshold of 2024 with some much needed extra family time, some rest from work, and most importantly, by cooking up some cool new stuff for mcjs!  (I know, I promised I would put out a new post every 2 weeks, but you know how it goes. I hope you two can forgive me. I promise, the next one will be on time!)
+
+<!-- TODO check that this link actually works -->
+([mcjs](mcjs-intro.md) is a toy JavaScript implementation, which I develop as a hobby/practice/fun side project.)
+
+<!-- TODO Publish the test page as part of the blog and link it here. -->
+The theme of this new stretch of JavaScript-induced masochism has been [test262, the ECMAScript Test Suite](https://github.com/tc39/test262). In particular, setting up a useful and nice-to-use test runner, and increasing the % of passing tests. The effort is still ongoing, but I'm happy with how things are unfolding. I also found myself grappling directly with some tricky parts of the language. No surprise there, but I believe there's value in jotting this down.
+
+Note that right now I'm focusing on the `test/language/` part of the test suite, as I'm not trying to make a full industrial-strength JavaScript VM, and I'm still *very* far even from my modest goals. I implemented try-catch a couple weeks ago. There's no GC, I'm struggling with *var* and *function*. You get it. 
+
+Finally, speaking of *var* and *function*, it became abundantly clear that that I had underestimated how much grief they would give me. That's going to be the target for the next efforts.
+
+# Tools!
+
+## Test262 runner
+
+I got an actual test262 test runner!
+
+It's really rough around the edges, but it allows me to:
+
+- re-run all tests with a specific version of the VM
+- analyze the test run data without re-running the tests every time
+- check which test cases have been made 'newly passing' or 'newly failing' at a specific Git commit
+- check progress across mcjs versions, and it even draws a line which the 3 of us can watch and wish for it to go up with our hearts full of hope and eagerness.
+
+<!-- TODO Actually publish + link the page -->
+The last bit is the one that has any chance of making any sort of impression, so here it goes in all its glory: [The Status Page]().
+
+### How it works
+
+This is more of a note to myself, as I'm not going to write real documentation for the test runner, but I will for sure somehow need it. So here goes.
+
+All of it happens in the `mcjs_test262` crate. It requires a local checkout of the [`test262`](https://github.com/tc39/test262) repo. The test runner system is basically made up of a linear pipeline of the following stages:
+
+1. I run `scripts/run.sh`.
+    - The program `mcjs_test262` gets the location of the test262 code and a list of test cases from the `scripts/tests.json` configuration file, performs the tests, and writes out an `out/runs.json` file which lists the outcome of each test case (one JSON document per line).
+
+    - The `mcjs_vm` crate being tested is the one "besides" the `mcjs_test262` directory. Different VM versions are tested by checking out different commits of the same `mcjs` repo. The commit ID is used as the version ID throughout the system.
+
+2. I run `scripts/import_bytecode.rb`. This takes the `out/runs.json` file, and adds it into the `out/tests.db` SQLite database. 
+    
+    - The `out/tests.db` persists across multiple test runs and different checkouts of the repo (the directory `out/` is `.gitignore`'d). It contains data about *all* the tests run that I've been doing lately.
+
+3. Then I may:
+    - run `scripts/status.sh` to get a quick overview of how many tests pass/fail by category;
+    - run `scripts/gen_status_page.rb` to re-generate The Status Page;
+    - run `scripts/compare.rb` to check which test cases are being fixed/broken by the changes I've made, compared to the last commit.
+
+That's pretty much it. The "data analysis" is done almost completely by SQLite, expressed in SQL. The shell/Ruby scripts are mostly there as a thin CLI layer.
+
+## Debugger in egui
+
+mcjs sports a debugger. Not a great one; it covers only the most basic functionality, but that's good enough for its designed purpose, which is to let me "see into" the VM well enough to understand why a particular piece of JS code is behaving in a particular way, or why a test is failing (or succeding) unexpectedly.
+
+It used to be a web application. This sounds stupid, and to a significant degree, it is: I had to figure out how to fit every workflow into HATEOAS, I had to figure out how to achieve the layouts I wanted in HTML+CSS, and I had to figure out how to connect the necessarily single-threaded JS interpreter to the potentially many concurrent request the server would receive. I managed: I got really good mileage out of [Actix Web](https://actix.rs/), [htmx](https://htmx.org/), and [Alpine.js](https://alpinejs.dev/), and Rust made it possible to solve the concurrency problem once and for all.
+
+In the end, the stupidity caught up to me. Every single feature I wanted to add required me to "refactor" the template until they fit the shape of the web routes; I struggled with htmx's attribute inheritance (although, in general, I loved it and would definitely use it again -together with Alpine.js- for my next web application). I had to do additional work in order to fit mcjs' data structures into a Serialize struct that can be used to fill templates in. I *love* the power and flexibility (and the simplicity, if you can believe it) of HTML and CSS when it comes to building crazy layouts, transitions, supporting multiple screen sizes, not to mention the ecosystem. But the extra work just wasn't worth it for a rugged, utilitarian _Tool_ that exists to get a simple job done quickly. 
+
+So I switched to a normal GUI application.  The least painful GUI library that I know for Rust is [egui](https://www.egui.rs/), so I picked it. I'm not 100% "😍" with it, but I'm impressed by its immediate-mode API which allows me to span the gamut from quick-and-dirty "just print this button" to a quite clean sort-of, if-you-squint-really-hard, [Elm Architecture](https://guide.elm-lang.org/architecture/) kinda thing.
+
+I managed to bang out a working thing in a few hours (spanning a few days; it was Christmas!), and I'm quite satisfied by the result. In the beginning I kept running into stupid bugs related to the immediate-mode API: updating the underlying VM's state would invalidate part of the already-drawn frame. After a while, I figured out a proper architecture, and I've been happy enough since.
+
+<!-- TODO Add some screenshots -->
+
+## Simple CLI shell
+
+This is the bit that makes mcjs feel like a real thing the most, more so than the step debugger or the test statistics. You can just type `mcjs` in the shell and it will spawn a prompt, and it will run your JS code! Just like Node.js!
+
+```
+sebastiano@fedora:~/Code/mcjs$ cargo run -p mcjs_vm --bin mcjs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.08s
+     Running `target/debug/mcjs`
+Welcome to mcjs.  It's got no version number yet.
+Type some JavaScript, see what you can get away with.
+> (function(x) { $print(`Hello, ${x}!`) })('you')
+  "Hello, you!"
+> $print(12 + 34)
+Number(46.0)
+> 
+```
+
+(`$print` is a built-in function that acts as a stopgap until I add `console.log`.) 
+
+# A simpler "2 stacks" design
+
+I figured that, if most of the performance is going to come from the JIT'ed code, and I'm not going to hand roll it in Assembly, the interpreter might as well be as simple as possible. Quite notably, the added simplicity becomes essential for the JIT (more on this later).
+
+Prior to this change, the interpreter had a single stack, with the following layout (each line is 8 bytes, the machine integer):
+
+```
+  ---- { Frame header 
+         ...
+                        }              
+       { capture[0]
+         capture[1]
+         ...
+         capture[NC-1]  }
+       {        arg[0]
+                arg[1]
+                   ...
+             arg[NA-1]  }
+       { reg[0]
+         reg[1]
+         ...
+         reg[NR-1]      }
+  ---- { Frame header 
+              ...
+                        }
+       { capture[0]
+         capture[1]
+         ...
+```
+
+The pictured frame contains NC _captures_ (pointers to the values that this closure shares with other closures), NA function call arguments, NR virtual registers values, topped with a "frame header" that contains one-off info about the current stack frame such as a pointer to the current JS function, the instruction ID, the target register ID for the return value, etc.
+
+Captures are actually already stored in the Closure structure. They're only copied to the stack as a form of caching. It would have been entirely possible to store a pointer to the closure in the frame header, and use that instead to get to the captures.
+
+The numbers NC, NA, and NR are stored in the frame header, and they're potentially different for each frame. This implies that it's necessary to parse the frame header in order to know the total length of the frame, which in turn is necessary to know the offset of the next frame. Moreover, since each frame is a different size, we can't express this data type as simple Rust code; rather, I had to take a raw chunk of bytes (literally a `Vec<u8>`), and implement all the reading/writing at the right offsets. Although doable, you can see how this looks complicated already.
+
+The new design is much simpler, and comes from 3 decisions:
+
+1. Call arguments are now regular registers. The first 8 arguments are stored in the first 8 virtual registers of the stack.
+    - The plan (as of yet unimplemented), is for further arguments to be stored on a separate structure on the heap. This makes sense, as it's quite uncommon; the typical number would be 0 - 5 arguments per call.
+
+2. Captures, up to a limited number, can be stored in the frame header.
+    - Again, the rest might go to a separate chunk on the heap, but another option is to pay for the extra indirection and get them from the called Closure.
+    
+3. Now that we're left with just frame headers and virtual registers, just store them in two separate stacks.
+
+The code complexity savings come from the fact that virtual registers and frame headers have a fixed size, so they amount to two arrays (two regular, bog-standard `Vec`s, actually). No parsing of headers to get to the _n_-th value, no custom implementation of `struct` on top of `[u8]`.
+
+Although I have suspended work on the JIT for the moment, the little experience I had there makes me hope in substantial simplification on that side as well. My reasoning is: upon exiting a trace, the interpreter's state needs to be patched so that, when the interpreter resumes, it finds its state "just as if" the JIT'ed code had run normally in the interpreter. This means that the trace has to write correct frame headers and register values. But the trace is written in machine code by the JIT compiler, and the JIT compiler is written by _me_, which means that this interpreter state patching had better be dumb, dead-simple, idiot-proof, or I will for sure screw it up.
+
+Here's to simple designs and good guesses!
+
+<!--
+* interpreter: switch to 2-stack design
+	- simpler!
+	- suprisingly easy!
+	df2a062
+	- but function arguments count is limited (to 8, I think)
+-->
+
+# JavaScript, y r u like this
+
+<!--
+* Tricky JS semantics that I discovered and had to grapple with
+	- unshare on loop back
+	- Tried out implementing eval.  In the end, abandoned!
+	- Started work on non-strict
+		- Had to make it per-function
+		- 'this substitution'
+-->
+## Loops & closures: it's a different var every time! 
+
+## Little bits and bobs
+
+<!--
+* Dime-a-dozen little JS features I implemented
+	- try/catch: basic exception handling kinda works now
+	- Coerce to string when doing string concatenation
+	- Object comparison by pointer
+	- Functions now have a 'prototype' property
+	- 'new' now adds the 'constructor' property
+-->
+
+# The current dragon: scoping rules
+
+<!--
+
+	- globalThis & a bunch of still-in-progress work on scoping rules
+		ecd4cec
+		- `this` in scripts toplevel* The current dragon: scoping rules;
+
+-->
+
+
