@@ -1,0 +1,790 @@
+<!doctype html>
+<html>
+
+  
+
+  <head>
+    <title>mcjs - Are we ECMAScript yet?</title>
+    <meta charset="utf-8">
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages': ['corechart']})
+      google.charts.setOnLoadCallback(drawChart)
+
+      function drawChart() {
+        const data = new google.visualization.arrayToDataTable([
+          ['version', '% OK'],
+          
+            
+            [ "0eb933048b942b5849e7ab5c8a37b381daa37a00"
+            , 26.518145885734818
+            ],
+          
+            
+            [ "40fa6a8aa6116eda538a2386f91f5c5eeb126cba"
+            , 26.518145885734818
+            ],
+          
+            
+            [ "40f38e349c0f066ca4435d281ace6b8a148fd8c3"
+            , 28.24290334171757
+            ],
+          
+            
+            [ "6781a2fff3616fded67dcc815e941ea7e742b7f2"
+            , 28.530362917714697
+            ],
+          
+            
+            [ "143f0025c571bf402bf0fb978f6965874e745079"
+            , 29.10528206970895
+            ],
+          
+            
+            [ "2d5e28948df4a02ebf9b0d322706af14dce45a89"
+            , 30.376855728968405
+            ],
+          
+            
+            [ "02cc2c85088ed043d4627237d95a94361704a0a9"
+            , 32.83643892339545
+            ],
+          
+            
+            [ "3f92a929a46c0953b4da0b04fe44cf29e249aacf"
+            , 32.83643892339545
+            ],
+          
+            
+            [ "485184df163b384d8a92e5a2274258427d9fdbb8"
+            , 32.83643892339545
+            ],
+          
+            
+            [ "4e72965e6b90417882e8e854726781ba216650ec"
+            , 32.91925465838509
+            ],
+          
+            
+            [ "2bca36f80d2a1de6e89e28e51ace7d2e5a3fc0a3"
+            , 32.91925465838509
+            ],
+          
+            
+            [ "09039ebffe4d307a9158b75ccac84d58703d4259"
+            , 32.96066252587992
+            ],
+          
+            
+            [ "12cf279cfa231dbb137c7b3938f6a355fc211107"
+            , 33.54037267080745
+            ],
+          
+            
+            [ "108eb3862583e51115a83e194e6a7de0d22d9e88"
+            , 33.54037267080745
+            ],
+          
+            
+            [ "3909872bbc3ddddf42f7f6c6515ffbbcbed71b38"
+            , 33.54037267080745
+            ],
+          
+            
+            [ "68b1fb3729be80a16aae48c053c307ba1fda0c99"
+            , 33.54037267080745
+            ],
+          
+            
+            [ "61736861110cede94962d4e1f88362b4742a91d6"
+            , 33.54037267080745
+            ],
+          
+            
+            [ "37313e96df0a7dd9332aa07c28d1584fa333f4b4"
+            , 33.54037267080745
+            ],
+          
+            
+            [ "ac1998a7d2f6969f3ac8db72e2a8021d7e6eb02f"
+            , 34.07867494824016
+            ],
+          
+            
+            [ "2ece532f29a210a6097efaf614eac0e6c28abd24"
+            , 35.15527950310559
+            ],
+          
+            
+            [ "6e2be0d6531047fcf65fb6b4b03d6451f47a040c"
+            , 35.445134575569355
+            ],
+          
+            
+            [ "02c8fc845cfc2d0556df6a1319b66c7f58482458"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "2f548b7d41bbf00b693701edbd923641cc80ef5e"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "743677d6e7ef08b271977a7a2a9daf91d6b22261"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "dda4b3afac3da11be390eb9fc360f6d0e61127b8"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "e7b06844eede1493417387fea99446236c0f5cc3"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "58833a39fa80eef7dab24683baabaad9e1b7f16a"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "2876d3ef64ef0ad3fe756cbd79a38d5c1f648983"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "b412ede64e27452ca2708c68ecb7f91eb0d6587c"
+            , 34.409937888198755
+            ],
+          
+            
+            [ "fc8831ecf55c909093041000bf03a5261a4669c3"
+            , null
+            ],
+          
+        ])
+
+        const options = {
+          width: 800,
+          height: 400,
+          vAxis: {
+            minValue: 0,
+            maxValue: 100,
+          },
+        }
+        const element = document.getElementById('chart')
+        const chart = new google.visualization.AreaChart(element)
+        chart.draw(data, options)
+      }
+    </script>
+
+    <style>
+      body { font-family: serif; }
+      h1 { text-align: center; }
+      body > * {
+        max-width: 800px;
+        margin: auto;
+        margin-bottom: 1.5cm;
+      }
+
+      table {
+        margin: auto; 
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
+      }
+      thead {
+        font-weight: bold;
+      }
+      tbody td {
+        font-family: monospace;
+      }
+      tbody td {
+        text-align: right;
+      }
+      tbody td:last-child {
+        text-align: left;
+      }
+      tbody tr:hover {
+        background-color: #eff6ff;
+      }
+      tbody a {
+        color: #1d4ed8;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>mcjs: <i>Are we ECMAScript yet?</i></h1>
+    <p>
+      This is about <a href="https://github.com/sebastiano-barrera/mcjs/">mcjs</a>, a toy implementation of JavaScript inspired by LuaJIT that I'm writing for fun and learning.  Learn more in the <a href="https://sebastiano.pages.dev/posts/mcjs-intro/">blog post</a>.
+    </p>
+
+    <p>
+    This chart tracks how much of the <i>test/language/</i> section of the <a href="https://github.com/tc39/test262/">Test262 ECMAScript Test Suite</a> mcjs passes today. Feels good to see the line go up!
+    </p>
+
+    <div id="chart"></div>
+
+    <table>
+      <thead>
+        <tr>
+          <td>Commit</td>
+          <td># OK</td>
+          <td># Fail</td>
+          <td>% OK</td>
+          <td>Summary</td>
+        </tr>
+      </thead>
+
+      <tbody>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/0eb933048b942b5849e7ab5c8a37b381daa37a00">
+                0eb933048
+              </a>
+            </td>
+            
+            
+              <td>738</td>
+              <td>2045</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_vm: add tool `scan_eval`
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/40fa6a8aa6116eda538a2386f91f5c5eeb126cba">
+                40fa6a8aa
+              </a>
+            </td>
+            
+            
+              <td>738</td>
+              <td>2045</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: disable some tests using `eval`
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/40f38e349c0f066ca4435d281ace6b8a148fd8c3">
+                40f38e349
+              </a>
+            </td>
+            
+            
+              <td>786</td>
+              <td>1997</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_vm: hack: support eval("...")
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/6781a2fff3616fded67dcc815e941ea7e742b7f2">
+                6781a2fff
+              </a>
+            </td>
+            
+            
+              <td>794</td>
+              <td>1989</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              scoping: error on const/let redeclaration
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/143f0025c571bf402bf0fb978f6965874e745079">
+                143f0025c
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1973</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              scoping: error on const/let + function redeclaration
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/2d5e28948df4a02ebf9b0d322706af14dce45a89">
+                2d5e28948
+              </a>
+            </td>
+            
+            
+              <td>798</td>
+              <td>1829</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: remove async tests
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/02cc2c85088ed043d4627237d95a94361704a0a9">
+                02cc2c850
+              </a>
+            </td>
+            
+            
+              <td>793</td>
+              <td>1622</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: remove tests with generators
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/3f92a929a46c0953b4da0b04fe44cf29e249aacf">
+                3f92a929a
+              </a>
+            </td>
+            
+            
+              <td>793</td>
+              <td>1622</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              fix regs count (independent from instr count)
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/485184df163b384d8a92e5a2274258427d9fdbb8">
+                485184df1
+              </a>
+            </td>
+            
+            
+              <td>793</td>
+              <td>1622</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_tools: allow viewing other stack frames
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/4e72965e6b90417882e8e854726781ba216650ec">
+                4e72965e6
+              </a>
+            </td>
+            
+            
+              <td>795</td>
+              <td>1620</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              impl `for(x in ...)` (without explicit `var`)
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/2bca36f80d2a1de6e89e28e51ace7d2e5a3fc0a3">
+                2bca36f80
+              </a>
+            </td>
+            
+            
+              <td>795</td>
+              <td>1620</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_tools: keep breakpoints across restart/file change
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/09039ebffe4d307a9158b75ccac84d58703d4259">
+                09039ebff
+              </a>
+            </td>
+            
+            
+              <td>796</td>
+              <td>1619</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              for...in: disallow kws in strict mode
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/12cf279cfa231dbb137c7b3938f6a355fc211107">
+                12cf279cf
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1605</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              fix if miscompilation
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/108eb3862583e51115a83e194e6a7de0d22d9e88">
+                108eb3862
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1605</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_tools: debug.sh: allow watch
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/3909872bbc3ddddf42f7f6c6515ffbbcbed71b38">
+                3909872bb
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1605</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_tools: show source code when intrp is failed
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/68b1fb3729be80a16aae48c053c307ba1fda0c99">
+                68b1fb372
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1605</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: track mcjs version in tests.db
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/61736861110cede94962d4e1f88362b4742a91d6">
+                617368611
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1605</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: bit of refactoring
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/37313e96df0a7dd9332aa07c28d1584fa333f4b4">
+                37313e96d
+              </a>
+            </td>
+            
+            
+              <td>810</td>
+              <td>1605</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: add support for '-dirty' suffix to more scripts
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/ac1998a7d2f6969f3ac8db72e2a8021d7e6eb02f">
+                ac1998a7d
+              </a>
+            </td>
+            
+            
+              <td>823</td>
+              <td>1592</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              reject `var` redecls of `let`/`const`
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/2ece532f29a210a6097efaf614eac0e6c28abd24">
+                2ece532f2
+              </a>
+            </td>
+            
+            
+              <td>849</td>
+              <td>1566</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: default to --release
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/6e2be0d6531047fcf65fb6b4b03d6451f47a040c">
+                6e2be0d65
+              </a>
+            </td>
+            
+            
+              <td>856</td>
+              <td>1559</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              reject `var` redecls of `let`/`const` at different scopes
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/02c8fc845cfc2d0556df6a1319b66c7f58482458">
+                02c8fc845
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: default back to debug mode
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/2f548b7d41bbf00b693701edbd923641cc80ef5e">
+                2f548b7d4
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: stop tracking status.txt
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/743677d6e7ef08b271977a7a2a9daf91d6b22261">
+                743677d6e
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              bc compiler: separate path for scripts
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/dda4b3afac3da11be390eb9fc360f6d0e61127b8">
+                dda4b3afa
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              interpreter: fix: wrong # instrs for root frame
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/e7b06844eede1493417387fea99446236c0f5cc3">
+                e7b06844e
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: scripts: refactor; add mk_report, run_multi
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/58833a39fa80eef7dab24683baabaad9e1b7f16a">
+                58833a39f
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: add status page generator
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/2876d3ef64ef0ad3fe756cbd79a38d5c1f648983">
+                2876d3ef6
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_test262: view 'general': add column is_strict
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/b412ede64e27452ca2708c68ecb7f91eb0d6587c">
+                b412ede64
+              </a>
+            </td>
+            
+            
+              <td>831</td>
+              <td>1584</td>
+              <td></td>
+            
+
+            <td class="align-left">
+              mcjs_tools: new script: compare.rb
+            </td>
+          </tr>
+        
+          <tr>
+            <td>
+              <a href="https://github.com/sebastiano-barrera/mcjs/commit/fc8831ecf55c909093041000bf03a5261a4669c3">
+                fc8831ecf
+              </a>
+            </td>
+            
+            
+              <td>&mdash;</td>
+              <td>&mdash;</td>
+              <td>&mdash;</td>
+            
+
+            <td class="align-left">
+              mcjs_test262: use version 'dirty' when the working tree is dirty
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  </body>
+
+</html>
+
