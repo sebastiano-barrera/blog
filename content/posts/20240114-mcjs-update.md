@@ -1,7 +1,6 @@
 ---
 title: "mcjs Progress Update: December, January 2024"
 date: 2024-01-14T18:52:01+01:00
-draft: true
 tags:
  - mcjs
 ---
