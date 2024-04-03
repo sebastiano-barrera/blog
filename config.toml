@@ -6,6 +6,9 @@ title = "sebastiano's notes"
 theme = "archie"
 # theme = "risotto"
 # theme = "hugo-paper"
+# theme = "devise"
+# theme = "mini"
+# theme = "bearcub"
 
 [params]
 mode = "auto"
