@@ -4,18 +4,18 @@ date: 2024-05-05T16:32:48+02:00
 draft: true
 ---
 
-Welcome back, to another installment of "What's new in mcjs".  Later than promised, but
+Good evening and welcome back, to another installment of "What's new in [mcjs](https://github.com/sebastiano-barrera/mcjs/)".  Later than promised, but
 rich in good news!
 
 (Formally, I blame the delay on an unplanned -- but not unwelcome! -- job change, but
 let's not kid ourselves. This is my emotional support side project, I have no intention of
-sticking to any sort of roadmap or schedule. That's the neat part!)
+sticking to any sort of roadmap or schedule. Down with project management!)
 
 # Scoping rules
 
 ![Screenshot from Sekiro, "Shinobi Execution" message laid over a view of the Guardian Ape, apparently defeated.](../20240505--shinobi-execution.jpg)
 
-_(Credit: https://www.reddit.com/r/Sekiro/comments/10mghn6/guys_i_just_beat_the_guardian_ape111 )_
+_(Source: https://www.reddit.com/r/Sekiro/comments/10mghn6/guys_i_just_beat_the_guardian_ape111 )_
 
 This was called the "next dragon" in the last post, and I have very good news about it:
 
@@ -33,7 +33,7 @@ test/language/block-scope/syntax/redeclaration-global                      100.0
 
 <!-- TODO Are there more groups that are relevant? -->
 
-All tests in the `block-scope` group pass! The dragon is slain! (Fingers crossed; there
+All tests in the `block-scope` group pass! The dragon is slain! (Fingers crossed; things generally work as they should, but there
 are a few other tests that exercise scoping rules, and I didn't pick that particular boss
 out of all those in Sekiro for no reason... 😉)
 
@@ -45,11 +45,11 @@ representation named the "PAST".
 There are 4 types of declaration in JavaScript, each introduced by a different keyword:
 `let`, `const`, `var` and `function`.
 
-`var` is considered legacy due to its behavior being quite surprising. In
-particular, it forces you to extend the scope of a variable to the whole enclosing
+`var` is considered legacy, largely due to its behavior being unintuitive in certain respects. In
+particular, it forces you to extend the scope of the variable to the whole enclosing
 function, even the part of it _before_ the line where the declaration appears! `function`
 behaves similarly, but functions are always expected to be somewhat "special" compared to
-variables, which makes its behavior "better accepted" by the typical programmer. 
+variables, which makes its behavior "better accepted" by the typical programmer.
 
 ```js
 // this works!
@@ -66,9 +66,13 @@ var x = 5;
 console.log(x);        // 5
 ```
 
+Also, `var` and `function` declarations found at the toplevel scope of a script are
+automatically turned into properties of the global object (i.e. `window`, `globalThis`),
+so they may "escape containment" and be accessed by any other part of the program.
+
 Nowadays, everyone is encouraged to use `let` and `const` instead, which enjoy the more
-"obvious" behavior of lexical scoping.  These declarations are valid "from now on", until
-the end of the enclosing block, just like in most programming languages:
+obvious behavior of lexical scoping.  These declarations are valid "from now on", until
+the end of the enclosing block, just like in most other programming languages:
 
 ```js
 console.log(x);  // => Uncaught ReferenceError: x is not defined
@@ -81,8 +85,8 @@ console.log(x);  // => Uncaught ReferenceError: x is not defined
 
 This is great, but it poses a challenge to us implementers: all 4 declaration types must
 be able to coexist in the same script/module, each with their behavior. Precise rules for
-their coexistence have been laid out, but are by their nature somewhat convoluted and
-unintuitive attempt. If you want an introduction, the MDN articles for
+their coexistence have been laid out, but they are, by their nature, somewhat convoluted and
+unintuitive. If you want an introduction, the MDN articles for
 [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function#redeclarations)
 and
 [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
@@ -97,23 +101,18 @@ declaration types **into "elements"** that can then be processed separately and
 independently by the bytecode compiler. In broad strokes, each declaration is now
 described in terms of:
 
-- what happens when there is a `"use strict"` directive (or when there isn't);
+- what happens when there is a `"use strict"` directive (and when there isn't);
 
-- what is their "visibility scope";
-
-    - `var` is visible throughout the whole enclosing function;
-    - `let`/`const` only in the smallest enclosing block;
-    - for `function`, it depends on whether we're in `"use strict"`, and there are even
-      some differences between implementations!
+- what is their "visibility scope" (e.g. enclosing function, enclosing block);
 
 - under which conditions redeclarations are allowed;
 
 - what happens if the declaration is at the script or module's toplevel.
 
-Once the declaration is understood in this form, I had to make sure that the visibility
-scope was actually honored during name resolution (i.e. 'widened' whenever necessary), and
-that any forbidden redeclarations were caught and prevented. I'm convinced that this
-basically *requires* the program to *store* the declarations in this new form. This is the
+Once the declaration is understood in this form, the bytecode compiler to make sure that the visibility
+scope is actually honored during name resolution (i.e. 'widened' whenever necessary), and
+that any forbidden redeclarations are caught and prevented. I'm convinced that this
+basically *requires* the program to *store* the declarations in this broken-down form. This is the
 chief reason that a **new intermediate representation** needed to be introduced in the
 bytecode compiler.
 
@@ -121,7 +120,7 @@ This new IR, named "PAST" (for _Pre-bytecode AST_, it's temporary, I know it suc
 @ me) sits between the AST (a direct representation of the JS source code) and the
 bytecode (directly executable by the interpreter).
 
-I don't like to keep things too abstract for too long, so let's start by looking with an
+I don't like to keep things too abstract for too long, so let's start by looking at an
 example of a typical PAST fragment (I know, this textual representation makes me want to
 gouge my eyes out, too... consider it programmer art):
 
@@ -221,7 +220,7 @@ It has the following characteristics:
 
 - It distinguishes between **statements**, **expressions**, and **declarations**.
 
-    - New valid variable names can only be introduced by declarations.
+    - New variable names can only be introduced explicitly by declarations.
     
     - Expressions are "inert": they represent the _syntax_ of an expression but do not
       imply its evaluation.
@@ -353,22 +352,22 @@ design didn't make so many things harder.
 
 Among these harder things is maintaining the state of the JS stack between a suspend and
 the following resume. This is necessary for the debugger to be of any use (think about it
-this way: the debugger is a GUI to the interpreter's state; it's useless if the
+this way: the debugger is a GUI editor of the interpreter's state; it's useless if the
 interpreter state must be reset to "zero" before the GUI can even be shown). In Rust
 terms, this use case can be stated as "both the interpreter and the debugger want a `&mut`
 to the interpreter's data". As a consequence, the interpreter must relinquish its `&mut`
 access to the debugger, and it will later get it back to resume execution.
 
 Now, if you're the interpreter and you're asked to resume execution, you're going to be
-given a JavaScript stack with _N_ frames. As we said, each has to correspond 1:1 with a
+given a JavaScript stack of a number of frames. As we said, each of these has to correspond 1:1 with a
 recursive call to `run_frame`. As far as I can tell, all you can do is what I call "stack
 climbing". In short, `run_frame` is designed so that (only when resuming!) it starts by
 calling itself again for the stack frame directly above until the 1:1 correspondence is
-re-established.  Bleh.
+re-established.  Then, as the top frame returns, each of the lower `run_frame` instances resume execution normally. Workable but... bleh.
 
-As I charted the way to certain features, chiefly generators, I started eyeing a stackless
+As I charted the way to certain features (primarily generators), I started eyeing a stackless
 design again.  After thinking about it and doing some practical experiments, it turns out
-that:
+that with a stackless design:
 
 - It's still clear what is borrowed when.
 
