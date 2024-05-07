@@ -526,5 +526,9 @@ That means it's time to put on the big boy pants and resume work on the JIT, the
 _actual_ compiler that mcjs is going to have.  I can't wait!
 
 Also, it turns out that I *can't* keep a regular pace in writing these posts, so no more
-promises now. You two are getting this post whenever I feel like it. Bye!
+promises now. You two are getting this post whenever I feel like it.
+
+Okay, maybe _one_ promise: I'm going to update the "line go up" ("Are we
+ECMAScript yet?") page soon. I just haven't got round to do it, unfortunately.
+Bye!
 
