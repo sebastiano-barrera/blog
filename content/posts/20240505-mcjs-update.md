@@ -1,7 +1,6 @@
 ---
 title: "mcjs Progress Update: May 2024"
 date: 2024-05-05T16:32:48+02:00
-draft: true
 ---
 
 Good evening and welcome back, to another installment of "What's new in [mcjs](https://github.com/sebastiano-barrera/mcjs/)".  Later than promised, but
