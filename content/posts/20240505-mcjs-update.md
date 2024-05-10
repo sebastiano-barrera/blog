@@ -531,3 +531,5 @@ Okay, maybe _one_ promise: I'm going to update the "line go up" ("Are we
 ECMAScript yet?") page soon. I just haven't got round to do it, unfortunately.
 Bye!
 
+*Update*: "Line go up" is back online. Admire it [here](/mcjs-dashboard) in all of its green glory.
+
